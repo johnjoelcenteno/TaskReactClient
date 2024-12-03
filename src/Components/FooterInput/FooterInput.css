@@ -1,0 +1,29 @@
+.footer-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 6;
+    width: 80%;
+    background-color: rgb(12, 109, 253);
+    /* Light background */
+    /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); */
+    padding: 10px;
+    z-index: 1000;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    height: 150px;
+}
+
+.footer-input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* Space between input and button */
+}
+
+.footer-input-button {
+    flex-shrink: 0;
+    /* Prevent button from shrinking */
+}

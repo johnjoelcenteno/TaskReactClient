@@ -1,0 +1,132 @@
+/* General Navbar Styling */
+.custom-navbar {
+    width: 100%;
+    /* Navbar takes 80% of the screen width */
+    margin: 0 auto;
+    /* Centers the navbar */
+    border-radius: 0 0 10px 10px;
+    /* Rounded corners at the bottom */
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+/* Tasks Text */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-right: auto;
+    /* Push to the left */
+}
+
+/* Navbar Links */
+.navbar-nav {
+    display: flex;
+    align-items: normal;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    /* Rounded corners for links */
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #0b5ed7;
+    color: white;
+    /* Hover background */
+}
+
+.nav-link.active {
+    font-weight: bold;
+    background-color: #4284F3;
+    /* Highlight active page */
+    color: #2d3436;
+    border-radius: 5px;
+    /* Rounded corners for active state */
+}
+
+/* Logout Button */
+.nav-logout {
+    font-size: 1.2rem;
+    /* Smaller icon */
+    color: white;
+    background-color: #d63031;
+    /* Red background for logout */
+    padding: 0.4rem 0.8rem;
+    /* Smaller padding */
+    border-radius: 5px;
+    /* Rounded corners */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-logout:hover {
+    background-color: #ff7675;
+    /* Lighter red on hover */
+}
+
+@media(max-width: 1024px) {
+    .custom-navbar {
+        width: 100%;
+        /* background-color: #d63031 !important; */
+        margin-left: 0px;
+    }
+
+    .navbar-nav {
+        margin-top: 2vh
+    }
+}
+
+@media(max-width: 768px) {
+    .custom-navbar {
+        width: 83%;
+        /* background-color: #d63031 !important; */
+        margin-left: 67px;
+    }
+
+    .navbar-nav {
+        margin-top: 2vh
+    }
+}
+
+@media(max-width: 425px) {
+    .custom-navbar {
+        width: 64%;
+        /* background-color: #d63031 !important; */
+        margin-right: 140px;
+        margin-left: 240px;
+    }
+
+    .navbar-nav {
+        margin-top: 2vh
+    }
+}
+
+@media(max-width: 414px) {
+    .custom-navbar {
+        width: 67%;
+        /* background-color: #d63031 !important; */
+        margin-right: 140px;
+        margin-left: 240px;
+    }
+
+    .navbar-nav {
+        margin-top: 2vh
+    }
+}
+
+@media(max-width: 320px) {
+    .custom-navbar {
+        width: 63%;
+        /* background-color: #f819d3 !important; */
+        margin-right: 140px;
+        margin-left: 269px;
+    }
+}

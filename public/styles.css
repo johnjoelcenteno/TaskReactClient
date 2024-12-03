@@ -1,0 +1,12 @@
+.custom-container {
+    min-height: 100vh;
+    width: 80%;
+    /* background-color: aqua; */
+    /* Use percentage for responsiveness */
+    max-width: 1000px;
+    /* Prevent it from growing too large */
+    min-width: 800px;
+    /* Ensure it doesn't shrink too small */
+    margin: 50px auto;
+    /* Center horizontally and add top margin */
+}

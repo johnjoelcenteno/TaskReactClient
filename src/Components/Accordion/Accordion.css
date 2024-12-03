@@ -1,0 +1,13 @@
+.accordion-button {
+    outline: none;
+    /* Remove default outline */
+    box-shadow: none !important;
+    /* Remove any box-shadow added by Bootstrap */
+}
+
+.accordion-button:focus {
+    outline: none;
+    /* Remove focus outline */
+    box-shadow: none !important;
+    /* Remove focus box-shadow */
+}

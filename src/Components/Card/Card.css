@@ -1,0 +1,47 @@
+.card-custom {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.card-icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.icon:hover {
+    color: #007bff;
+}
+
+.check-icon {
+    color: green;
+}
+
+.x-icon {
+    color: red;
+}
+
+.edit-icon {
+    color: #ffa500;
+}
