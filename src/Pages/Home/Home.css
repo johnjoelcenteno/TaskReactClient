@@ -1,5 +1,30 @@
 .add-category-btn {
     width: 40px;
     height: 40px;
+}
 
+.body-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card-custom {
+    width: 90%;
+}
+
+@media (min-width: 320px) {
+    .custom-container {
+        /* background-color: red; */
+        min-width: 320px;
+    }
+}
+
+@media (max-width: 425px) {
+    .card-cutom {
+        width: 80% !important;
+    }
+
+    .body-container {
+        flex-direction: column;
+    }
 }

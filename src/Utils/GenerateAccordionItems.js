@@ -4,13 +4,13 @@ import TaskService from '../Services/Task/Task';
 import CategoryService from '../Services/Category/Category';
 
 const generateAccordionItems = (dbCategories, openModal, handleNavigation, setToast, setCategories) => {
-    console.log(dbCategories, 'dbCategories');
+    // console.log(dbCategories, 'dbCategories');
     return dbCategories.map((category, index) => ({
         title: category.name,
         numberOfTasks: category.tasks.length,
         content: (
             <>
-                <div className="d-flex flex-row justify-content-evenly">
+                <div className="body-container">
                     {category.tasks.slice(0, 3).map((task, idx) => (
                         <Card
                             key={`db-${index}-${idx}`}
@@ -33,7 +33,8 @@ const generateAccordionItems = (dbCategories, openModal, handleNavigation, setTo
                                 dueDate: task.dueDate,
                                 taskId: task.taskId,
                                 categoryId: task.categoryId,
-                                categoryName: task.categoryName
+                                categoryName: task.categoryName,
+                                status: task.status
                             })}
                             onCheck={async () => {
                                 try {
@@ -81,7 +82,7 @@ const generateAccordionItems = (dbCategories, openModal, handleNavigation, setTo
                         variant="primary"
                         size="sm"
                         className="shadow"
-                        onClick={() => handleNavigation("/tasks")}
+                        onClick={() => handleNavigation(`/tasks/${category.categoryId}`)}
                     >
                         View more
                     </Button>

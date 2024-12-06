@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./Accordion.css"; // Add your custom styles if needed
+import "./Accordion.css";
 
 const Accordion = ({ items }) => {
     return (

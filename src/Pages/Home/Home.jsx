@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import Accordion from '../../Components/Accordion/Accordion';
 import Button from '../../Components/Button/Button';
 import HomeModals from '../../Components/HomeModals/HomeModals';
 import { FaPlus } from 'react-icons/fa';
 import generateAccordionItems from '../../Utils/GenerateAccordionItems';
+import { homePageInit } from '../../Hooks/PageInit';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import CategoryService from '../../Services/Category/Category';
+
 import { useToast } from '../../Context/ToastContext';
 
 const Home = () => {
     const setToast = useToast();
-    const [categories, setCategories] = useState([]); // Holds categories and tasks
+    const [categories, setCategories] = useState([]);
 
     const navigate = useNavigate();
     const handleNavigation = (url) => navigate(url);
@@ -25,14 +26,15 @@ const Home = () => {
         updateCategory: { isOpen: false, categoryName: "" },
     });
 
-    const openModal = (modalName, payload = null) => { // refactor this 
+    const openModal = (modalName, payload = null) => {
+
         setModals((prev) => {
             if (payload) return { ...prev, [modalName]: { isOpen: true, ...payload } };
             return { ...prev, [modalName]: true };
         });
     };
 
-    const closeModal = (modalName) => { // refactor this
+    const closeModal = (modalName) => {
         setModals((prev) => {
             if (typeof prev[modalName] === 'object') return { ...prev, [modalName]: { isOpen: false } };
             return { ...prev, [modalName]: false };
@@ -40,26 +42,15 @@ const Home = () => {
     };
 
     useEffect(() => {
-        CategoryService
-            .fetchCategoriesForAccordion()
-            .then(accordionData => {
-                const categorySelectOptions = accordionData.map(x => ({ value: x.categoryId, label: x.name }));
-                setModals(prev => ({ ...prev, categorySelectOptions }));
-
-                setCategories(accordionData);
-            })
-            .catch(err => {
-                setToast({
-                    id: Date.now(),
-                    title: "Please try again",
-                    message: err.message,
-                    type: "danger",
-                });
-            });
+        homePageInit(setCategories);
     }, []);
 
-    const accordionItems = generateAccordionItems(categories, openModal, handleNavigation, setToast, setCategories);
+    useEffect(() => {
+        const categoryOptions = categories.map(category => ({ value: category.categoryId, label: category.name }));
+        setModals(prev => ({ ...prev, categoryOptions }));
+    }, [categories]);
 
+    const accordionItems = useMemo(() => generateAccordionItems(categories, openModal, handleNavigation, setToast, setCategories), [categories]);
     return (
         <div className="custom-container">
             <Navbar />

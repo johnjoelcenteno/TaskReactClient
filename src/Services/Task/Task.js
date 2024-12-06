@@ -2,6 +2,9 @@ import {
     UpdateTask,
     GetById,
     DeleteTask,
+    GetByCategoryId,
+    GetByUserId,
+    InsertTask
 } from '../../Api/Task';
 import { handleApiResponse, handleApiError } from '../../Utils/apiUtils';
 class Task {
@@ -37,14 +40,42 @@ class Task {
             let { data: task } = handleApiResponse(taskResponse, "Get by id successful");
             if (!task) throw { message: "Task not found " }
 
-
-
             const response = await UpdateTask(taskId, model);
+
             return handleApiResponse(response, "Updated task successfully");
         } catch (error) {
             return handleApiError(error, 'Failed to update task');
         }
     }
+
+    static async GetByCategoryId(categoryId) {
+        try {
+            const resposne = await GetByCategoryId(categoryId);
+            return handleApiResponse(resposne, "Fetched task successfully");
+        } catch (error) {
+            return handleApiError(error, "Failed to fetch task");
+        }
+    }
+
+    static async GetTaskByUserId() {
+        try {
+            const response = await GetByUserId();
+            return handleApiResponse(response, "Fetched task successfully");
+        } catch (error) {
+            return handleApiError(error, "Failed to fetch tasks");
+        }
+    }
+
+    static async CreateTask(payload) {
+        try {
+            const response = await InsertTask(payload);
+            return handleApiResponse(response, "Task created successfully");
+        } catch (error) {
+            return handleApiError(error, "Task creation failed");
+        }
+    }
+
+
 }
 
 export default Task;

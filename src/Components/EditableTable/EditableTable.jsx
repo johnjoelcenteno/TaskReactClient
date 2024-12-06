@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FaTrash, FaSave, FaEdit } from "react-icons/fa";
 import Modal from '../Modal/Modal';
+import { useSubmissionHandlers } from '../../Hooks/useSubmissionHandlers';
+import TaskService from '../../Services/Task/Task';
+import { useToastNotification } from '../../Hooks/useToastNotification';
+
 import './EditableTable.css';
 
-const EditableTable = ({ data }) => {
-    const [tasks, setTasks] = useState(data);
+const EditableTable = ({ tasks, setTasks }) => {
+    const showToast = useToastNotification();
     const [editingRow, setEditingRow] = useState(null);
     const [editedRow, setEditedRow] = useState({});
     const [deleteModal, setDeleteModal] = useState(false);
-    const [deletedTaskTitle, setDeletedTaskTitle] = useState('');
-    const [errors, setErrors] = useState({}); // Store field-specific errors
+    const [taskToBeDeleted, setTaskToBeDeleted] = useState({ id: 0, taskTitle: "" });
+    const [errors, setErrors] = useState({});
+    const { updateTaskSubmission } = useSubmissionHandlers();
 
     const handleEditClick = (index, task) => {
         setEditingRow(index);
@@ -60,8 +65,7 @@ const EditableTable = ({ data }) => {
         }));
     };
 
-    const handleSaveClick = (index) => {
-        // Validate all fields before saving
+    const handleSaveClick = async (index) => {
         let isValid = true;
         Object.keys(editedRow).forEach((field) => {
             validateField(field, editedRow[field]);
@@ -70,26 +74,34 @@ const EditableTable = ({ data }) => {
             }
         });
 
-        if (!isValid) {
-            return; // Prevent saving if validation fails
-        }
+        if (!isValid) return;
 
         const updatedTasks = [...tasks];
         updatedTasks[index] = editedRow;
+        console.log(editedRow, 'ako si editedRow');
+
+        const { title, status, description, dueDate, taskId, categoryId } = editedRow;
+        const payload = { title, status, description, dueDate, categoryId };
+
+
+        await updateTaskSubmission(payload, taskId);
 
         setTasks(updatedTasks);
         setEditingRow(null);
     };
 
     const handleDeleteClick = (index) => {
-        setDeletedTaskTitle(tasks[index].title);
+        const taskId = tasks[index].taskId;
+        const taskTitle = tasks[index].title;
+
+        setTaskToBeDeleted({ taskId, taskTitle });
         setDeleteModal(true);
     };
 
     return (
-        <div className="table-responseive">
+        <div className="table-responsive">
             <table className="table table-hover table-bordered">
-                <caption>{tasks.length} total tasks</caption>
+
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -101,6 +113,13 @@ const EditableTable = ({ data }) => {
                     </tr>
                 </thead>
                 <tbody>
+                    {
+                        tasks.length == 0 &&
+                        <tr>
+                            <td colSpan={6} className="text-center">No available data</td>
+                        </tr>
+                    }
+
                     {tasks.map((task, index) => (
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
@@ -163,7 +182,6 @@ const EditableTable = ({ data }) => {
                                         className="form-select form-select-sm"
                                     >
                                         <option value="Pending">Pending</option>
-                                        <option value="In Progress">In Progress</option>
                                         <option value="Completed">Completed</option>
                                     </select>
                                 ) : (
@@ -203,22 +221,26 @@ const EditableTable = ({ data }) => {
                 onClose={() => setDeleteModal(false)}
                 proceedButtonClass="btn-danger"
                 proceedButtonTitle="Delete"
+                submitBtnOnClick={async () => {
+                    try {
+                        await TaskService.DeleteTask(taskToBeDeleted.taskId);
+                        setDeleteModal(false);
+
+
+                        setTasks((prevTasks) =>
+                            prevTasks.filter((task) => task.taskId !== taskToBeDeleted.taskId)
+                        );
+
+                        showToast("Delete success", "Task deleted successfully", "success");
+                    } catch (error) {
+                        showToast("Error deleting task", error, "danger");
+                    }
+                }}
             >
-                <h6>Delete <span className="fw-bold">{deletedTaskTitle}</span></h6>
+                <h6>Delete <span className="fw-bold">{taskToBeDeleted.taskTitle}</span></h6>
             </Modal>
         </div>
     );
-};
-
-EditableTable.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            description: PropTypes.string.isRequired,
-            dueDate: PropTypes.string.isRequired,
-            status: PropTypes.string.isRequired,
-        })
-    ).isRequired,
 };
 
 export default EditableTable;

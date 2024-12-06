@@ -2,24 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Select.css";
 
-/**
- * A reusable Select component with size and validation support.
- * @param {string} label - The label for the select field.
- * @param {string} size - The size of the select ('sm', 'lg', or undefined for default).
- * @param {array} options - An array of options for the select dropdown. Each option is an object with `value` and `label`.
- * @param {string} value - The current value of the select field.
- * @param {function} onChange - Callback function to handle select changes.
- * @param {function} onBlur - Callback function to handle onBlur event.
- * @param {string} name - The name of the select field (useful for forms).
- * @param {boolean} touched - Whether the field has been touched (for validation).
- * @param {string} errors - Validation error message for the field.
- */
 const Select = ({
     label = "",
     size = undefined,
     customClass = "",
     options = [],
-    value,
+    value = "",
     onChange,
     onBlur,
     name,

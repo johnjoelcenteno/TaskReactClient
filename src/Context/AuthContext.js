@@ -9,28 +9,26 @@ const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('accessToken');
         return {
             user: null,
-            isAuthenticated: !!token, // Initialize based on token presence
+            isAuthenticated: !!token,
         };
     });
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                setAuth({ user: null, isAuthenticated: false });
-                return;
-            }
-
             try {
+                if (!auth.isAuthenticated) return;
+
                 const { data } = await getUserProfile();
                 setAuth({ user: data, isAuthenticated: true });
             } catch (error) {
+
+
                 console.error('Error fetching user profile:', error);
                 setAuth({ user: null, isAuthenticated: false });
             }
         };
 
-        fetchUserProfile(); // Rebuild the state when the app loads
+        fetchUserProfile();
     }, []);
 
     const logout = async () => {

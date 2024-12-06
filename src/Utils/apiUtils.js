@@ -1,4 +1,5 @@
 export const handleApiResponse = (response, defaultMessage = 'Successful') => {
+    // console.log(response, 'ako si response');
     if (response?.status === 200 && response?.data) {
         return {
             success: true,

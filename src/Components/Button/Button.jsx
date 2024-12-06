@@ -1,18 +1,6 @@
-// File: src/components/Button/Button.jsx
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * A reusable button component using Bootstrap.
- * @param {string} variant - The Bootstrap button style (e.g., 'primary', 'secondary').
- * @param {string} size - The size of the button (e.g., 'sm', 'lg').
- * @param {boolean} isDisabled - If true, disables the button.
- * @param {boolean} isLoading - If true, shows a loading spinner inside the button.
- * @param {string} className - Additional custom classes.
- * @param {function} onClick - Function to call when the button is clicked.
- * @param {React.ReactNode} children - Button content.
- */
 const Button = ({
     variant = 'primary',
     size,
@@ -48,7 +36,7 @@ const Button = ({
     );
 };
 
-// Prop types for better type checking
+
 Button.propTypes = {
     variant: PropTypes.string,
     size: PropTypes.oneOf(['sm', 'lg']),

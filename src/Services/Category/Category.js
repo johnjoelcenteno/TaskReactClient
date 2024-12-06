@@ -2,7 +2,9 @@ import {
     CreateCategory,
     GetTaskGroupedByCategory,
     DeleteCategory,
-    UpdateCategory
+    UpdateCategory,
+    GetCategoryById,
+    GetCategoryByUserId
 } from '../../Api/Category';
 import { handleApiResponse, handleApiError } from '../../Utils/apiUtils';
 
@@ -53,6 +55,24 @@ class CategoryService {
         if (!success) throw { message: 'Error getting categories' };
         return data.map(category => ({ ...category, isOpen: false })) || [];
     };
+
+    static async GetCategoryById(categoryId) {
+        try {
+            const result = await GetCategoryById(categoryId);
+            return handleApiResponse(result, "Fetch category successful");
+        } catch (error) {
+            return handleApiError(error, "Failed to fetch category");
+        }
+    }
+
+    static async GetByUserId() {
+        try {
+            const result = await GetCategoryByUserId();
+            return handleApiResponse(result, "Fetch category successful");
+        } catch (error) {
+            return handleApiError(error, "Failed to fetch category");
+        }
+    }
 
 
 }

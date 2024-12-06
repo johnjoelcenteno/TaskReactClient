@@ -4,105 +4,19 @@ import Input from '../../Components/Input/Input';
 import TaskService from '../../Services/Task/Task';
 import CategoryService from '../../Services/Category/Category';
 import Select from '../../Components/Select/Select';
-import { useFormik } from 'formik';
-import { useToast } from '../../Context/ToastContext';
 
-import * as Yup from 'yup';
+import { useToast } from '../../Context/ToastContext';
+import { useSubmissionHandlers } from '../../Hooks/useSubmissionHandlers';
+import { useCreateCategoryForm, useUpdateCategoryForm, useUpdateTaskForm } from '../../Hooks/useFormValidation';
 
 function HomeModals({ modalData, closeModal, setCategories }) {
-
     const setToast = useToast();
-    const fetchAndSetNewCategories = async () => {
-        const newCategories = await CategoryService.fetchCategoriesForAccordion();
-        setCategories(newCategories);
-    }
-    const validations = { // TODO: refactor this once done. 
-        createCategoryValidation: useFormik({
-            initialValues: {
-                categoryTitle: "",
-            },
-            validationSchema: Yup.object({
-                categoryTitle: Yup.string().required("Category name must not be empty"),
-            }),
-            onSubmit: async (values, { resetForm }) => {
-                try {
-                    const title = values.categoryTitle;
-                    await CategoryService.createCategory(title);
-                    resetForm();
+    const { createCategorySubmission, updateCategorySubmission, updateTaskSubmission } = useSubmissionHandlers(closeModal, modalData, setCategories);
 
-                    setToast({
-                        title: "Success",
-                        message: "Category created successfully!",
-                        type: "success",
-                    });
-
-                    fetchAndSetNewCategories();
-
-                    closeModal && closeModal('createCategory');
-                } catch (error) {
-                    console.error("Error in onSubmit:", error);
-
-                    setToast({
-                        title: "Error",
-                        message: error.message || "Failed to create category. Please try again.",
-                        type: "danger",
-                    });
-                }
-            },
-        }),
-        updateCategoryValidation: useFormik({
-            initialValues: {
-                updateCategoryTitle: modalData.updateCategory.categoryName || "",
-            },
-            enableReinitialize: true,
-            validationSchema: Yup.object({
-                updateCategoryTitle: Yup.string().required("Category name must not be empty")
-            }),
-            onSubmit: async (values, { resetForm }) => {
-                try {
-                    const categoryId = modalData.updateCategory.categoryId;
-                    const title = values.updateCategoryTitle;
-                    const { success, message } = await CategoryService.UpdateCategory(categoryId, { title });
-                    if (!success) throw { message }
-
-                    // console.log(result);
-                    setToast({
-                        title: "Success",
-                        message: "Category created successfully!",
-                        type: "success",
-                    });
-                    fetchAndSetNewCategories();
-                    closeModal('updateCategory');
-                } catch (error) {
-                    console.error("Error in onSubmit:", error);
-
-                    setToast({
-                        title: "Error",
-                        message: error.message || "Failed to update category. Please try again.",
-                        type: "danger",
-                    });
-                }
-            }
-        }),
-        updateTaskValidation: useFormik({
-            initialValues: {
-                updateTaskTitle: modalData.updateTask.title || "",
-                updateTaskDescription: modalData.updateTask.description || "",
-                updateTaskDueDate: modalData.updateTask.dueDate || "",
-                updateTaskCategoryId: modalData.updateTask?.categoryId || "",
-            },
-            enableReinitialize: true,
-            validationSchema: Yup.object({
-                updateTaskTitle: Yup.string().required("Title must not be empty"),
-                updateTaskDescription: Yup.string().required('Description must not be empty'),
-                updateTaskDueDate: Yup.string().required('Due date must not be empty')
-            }),
-            onSubmit: async (values, { resetForm }) => {
-                console.log(values);
-                // await TaskService.UpdateTask();
-            }
-        })
-
+    const validations = {
+        createCategoryValidation: useCreateCategoryForm(createCategorySubmission),
+        updateCategoryValidation: useUpdateCategoryForm(modalData, updateCategorySubmission),
+        updateTaskValidation: useUpdateTaskForm(modalData, updateTaskSubmission)
     };
 
     return (
@@ -272,13 +186,13 @@ function HomeModals({ modalData, closeModal, setCategories }) {
 
                     <Select
                         label="Category"
-                        options={modalData?.categorySelectOptions || []}
+                        options={modalData?.categoryOptions || []}
                         value={validations.updateTaskValidation.values.updateTaskCategoryId}
                         onChange={validations.updateTaskValidation.handleChange}
                         onBlur={validations.updateTaskValidation.handleBlur}
                         touched={validations.updateTaskValidation.touched.updateTaskCategoryId}
                         errors={validations.updateTaskValidation.errors.updateTaskCategoryId}
-                        name="updateTaskCategory"
+                        name="updateTaskCategoryId"
                     />
                 </Modal>
             </form>

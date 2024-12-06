@@ -14,7 +14,7 @@ const Card = ({
     onEdit = () => { }
 }) => {
     return (
-        <div className="card-custom" style={{ width: "15rem" }}>
+        <div className="card-custom">
             <div className="card-body">
                 <h5 className="card-title">{title}</h5>
                 <p className="card-text">{content}</p>

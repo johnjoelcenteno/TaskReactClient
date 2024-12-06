@@ -9,7 +9,7 @@ const GenerateRoutes = () => {
         <>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
+            <Route path="/tasks/:id" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
             <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />
         </>
     );

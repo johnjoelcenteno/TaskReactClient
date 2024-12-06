@@ -28,11 +28,14 @@ apiClient.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-
             try {
+                const refreshToken = localStorage.getItem('refreshToken');
+
                 const { data } = await axios.post(
-                    'http://localhost:8080/token', // Refresh token endpoint
-                    {},
+                    'http://localhost:8080/auth/token',
+                    {
+                        token: refreshToken
+                    },
                     { withCredentials: true }
                 );
 
@@ -41,9 +44,10 @@ apiClient.interceptors.response.use(
 
                 return apiClient(originalRequest);
             } catch (refreshError) {
-                console.error('Refresh token failed:', refreshError);
                 localStorage.removeItem('accessToken');
-                window.location.href = '/';
+                localStorage.removeItem('refreshToken');
+
+                return refreshError;
             }
         }
 
