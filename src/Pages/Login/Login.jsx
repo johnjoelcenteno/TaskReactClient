@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Input from '../../Components/Input/Input';
 import Button from '../../Components/Button/Button';
 import { useFormik } from 'formik';
@@ -11,6 +11,7 @@ import './Login.css';
 const Login = () => {
     const navigate = useNavigate();
     const { setAuth } = useContext(AuthContext);
+    const [loginError, setLoginError] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -34,8 +35,8 @@ const Login = () => {
 
                 navigate('/home');
             } catch (error) {
+                setLoginError(true);
                 console.error('Login failed:', error);
-                alert('Invalid username or password');
             }
         },
     });
@@ -45,6 +46,7 @@ const Login = () => {
         <div className="background-container">
             <div className="login-card">
                 <h1 className="login-title">Tasks</h1>
+
                 <form onSubmit={formik.handleSubmit}>
 
                     <Input
@@ -78,6 +80,8 @@ const Login = () => {
                         Login
                     </Button>
                 </form>
+
+                {loginError && <h6 className="mt-3 text-danger">Invalid username or password</h6>}
             </div>
         </div>
     );
